@@ -8,7 +8,7 @@ const App = () => {
       {isLoggedIn ? (
         <BrowserRouter>
           <Navbar />
-          <div>
+          <div className="ml-2">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/equipment" element={<Equipment />} />

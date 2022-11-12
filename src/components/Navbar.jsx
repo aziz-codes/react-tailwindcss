@@ -1,22 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { links } from "../data/dummy";
 import { EnvelopeIcon, BellIcon } from "@heroicons/react/24/outline";
+import BottomNavigation from "./BottomNavigation";
 const Navbar = () => {
+  const [isSmallScreen, setSmallScreen] = useState(false);
+  const [screenSize, setScreenSize] = useState(undefined);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenSize(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  });
+
+  useEffect(() => {
+    if (screenSize <= 600) {
+      setSmallScreen(true);
+    } else {
+      setSmallScreen(false);
+    }
+  }, [screenSize]);
+
   return (
-    <div className="relative flex flex-row justify-between p-2 h-10 items-center shadow-md md:sticky md:top-0">
-      <div>
+    <div className="relative flex flex-row justify-between p-0 h-12 items-center shadow-md md:sticky md:top-0 pr-2 pl-0">
+      <div className="pl-2">
         <h4 className="font-bold text-xl">Bootcamp</h4>
       </div>
-      <div className="flex items-center gap-4">
-        {links.map((item, index) => (
-          <NavLink to={item.path} key={index} className="flex flex-row gap-3">
-            <span className="text-xs font-medium tracking-tight text-sky-500">
-              {item.label}
-            </span>
-          </NavLink>
-        ))}
-      </div>
+      {isSmallScreen ? (
+        <BottomNavigation />
+      ) : (
+        <div className="hidden md:flex items-center gap-4 md:gap-10">
+          {links.map((item, index) => (
+            <NavLink to={item.path} key={index} className="flex flex-row gap-3">
+              <span className="text-xs font-medium tracking-tight text-sky-500 md:text-lg font-sans">
+                {item.label}
+              </span>
+            </NavLink>
+          ))}
+        </div>
+      )}
+
       <div className="flex items-center gap-4">
         <div>
           <EnvelopeIcon className="icons" />

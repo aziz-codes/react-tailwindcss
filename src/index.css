@@ -4,6 +4,8 @@
 
 @layer components{
     .icons{
-        @apply h-6 w-6 text-gray-400
+        @apply h-6 w-6 text-gray-400 cursor-pointer hover:scale-125
+        transition-all
+        duration-150 ease-out
     }
 }

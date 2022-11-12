@@ -3,6 +3,7 @@ import {
   ChartBarIcon,
   UsersIcon,
   TicketIcon,
+  UserCircleIcon,
 } from "@heroicons/react/24/outline";
 export const links = [
   {
@@ -24,5 +25,10 @@ export const links = [
     path: "/equipment",
     label: "Equipment",
     icon: <TicketIcon />,
+  },
+  {
+    path: "/client",
+    label: "Client",
+    icon: <UserCircleIcon />,
   },
 ];
