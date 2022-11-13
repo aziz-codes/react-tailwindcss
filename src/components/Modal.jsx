@@ -16,15 +16,12 @@ const style = {
   p: 4,
 };
 
-export default function Popup() {
-  const [open, setOpen] = React.useState(true);
-  const handleClose = () => setOpen(false);
-
+export default function Popup({ isOpen, handleIsOpen }) {
   return (
     <div>
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={isOpen}
+        onClose={handleIsOpen}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

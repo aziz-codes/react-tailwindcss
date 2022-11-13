@@ -9,10 +9,14 @@ const Navbar = () => {
   const { user } = UserAuth();
   const [isSmallScreen, setSmallScreen] = useState(false);
   const [screenSize, setScreenSize] = useState(undefined);
+  const [isOpen, setIsOpen] = useState(false);
   const [clicked, setIsClicked] = useState(false);
   const handleClickAvatar = () => {
-    setIsClicked((prevState) => !prevState);
-    console.log(clicked);
+    setIsClicked(true);
+    setIsOpen((prevState) => !prevState);
+  };
+  const handleIsOpen = () => {
+    setIsOpen(false);
   };
   useEffect(() => {
     const handleResize = () => {
@@ -32,9 +36,12 @@ const Navbar = () => {
       setSmallScreen(false);
     }
   }, [screenSize]);
-
+  const normalLink =
+    "text-sm font-medium tracking-tight text-white md:text-lg font-sans ";
+  const activeLink =
+    "text-sm font-medium tracking-tight text-white md:text-lg font-sans  border-b-2 border-sky-600";
   return (
-    <div className="relative flex flex-row justify-between p-0 h-12 items-center shadow-md md:sticky md:top-0 pr-2 pl-0">
+    <div className="relative flex flex-row md:justify-between justify-around p-0 h-12 items-center shadow-md md:sticky md:top-0 pr-2 pl-0">
       <div className="pl-2">
         <h4 className="font-bold text-xl">Bootcamp</h4>
       </div>
@@ -43,12 +50,16 @@ const Navbar = () => {
       ) : (
         <div
           className={`${
-            isSmallScreen ? "hidden" : "flex items-center gap-4 md:gap-10"
+            isSmallScreen ? "hidden" : "flex items-center gap-4 md:gap-10 "
           } `}
         >
           {links.map((item, index) => (
-            <NavLink to={item.path} key={index} className="flex flex-row gap-3">
-              <span className="text-sm font-medium tracking-tight text-sky-500 md:text-lg font-sans">
+            <NavLink
+              to={item.path}
+              key={index}
+              className={({ isActive }) => (isActive ? activeLink : normalLink)}
+            >
+              <span className="text-sm font-medium tracking-tight text-black md:text-lg font-sans">
                 {item.label}
               </span>
             </NavLink>
@@ -57,13 +68,16 @@ const Navbar = () => {
       )}
 
       <div className="flex items-center gap-4">
-        <div>
-          <EnvelopeIcon className="icons" />
-          <div className="h-2 w-2 bg-green-600 rounded-full absolute top-2 animate-pulse"></div>
+        <div className="relative icons">
+          <EnvelopeIcon />
+          <div className="h-2 w-2 bg-green-600 rounded-full absolute top-1 animate-pulse"></div>
         </div>
-        <div>
-          <BellIcon className="icons" />
-          <div className="h-3 w-3 bg-red-600 rounded-full absolute top-1 animate-pulse text-xs flex items-center justify-center p-1 font-bold">
+        <div className="icons relative">
+          <BellIcon />
+          <div
+            className="h-3 w-3 bg-red-600 rounded-full absolute -top-1
+           animate-pulse text-xs flex items-center justify-center p-1 font-bold"
+          >
             3
           </div>
         </div>
@@ -71,13 +85,15 @@ const Navbar = () => {
         <div className="rounded-full h-8 w-8 bg-gray-400">
           <img
             src={`${user.photoURL}`}
-            alt="avatar"
+            alt="avt"
             className="h-8 w-8 rounded-full cursor-pointer"
             onClick={handleClickAvatar}
           />
         </div>
       </div>
-      <div className="absolute top-5 left-5">{clicked ? <Popup /> : null}</div>
+      <div className="absolute top-5 left-5">
+        {clicked ? <Popup isOpen={isOpen} handleIsOpen={handleIsOpen} /> : null}
+      </div>
     </div>
   );
 };
