@@ -1,11 +1,13 @@
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Home, Equipment, Employees, Client, Statistics } from "./pages/index";
+import SignIn from "./components/SignIn";
+import { UserAuth } from "./context/AuthContext";
 const App = () => {
-  const isLoggedIn = true;
+  const { user } = UserAuth();
   return (
     <>
-      {isLoggedIn ? (
+      {user ? (
         <BrowserRouter>
           <Navbar />
           <div className="ml-2">
@@ -19,7 +21,7 @@ const App = () => {
           </div>
         </BrowserRouter>
       ) : (
-        "please login to continue"
+        <SignIn />
       )}
     </>
   );

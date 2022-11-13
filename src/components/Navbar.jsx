@@ -3,10 +3,17 @@ import { NavLink } from "react-router-dom";
 import { links } from "../data/dummy";
 import { EnvelopeIcon, BellIcon } from "@heroicons/react/24/outline";
 import BottomNavigation from "./BottomNavigation";
+import { UserAuth } from "../context/AuthContext";
+import Popup from "./Modal";
 const Navbar = () => {
+  const { user } = UserAuth();
   const [isSmallScreen, setSmallScreen] = useState(false);
   const [screenSize, setScreenSize] = useState(undefined);
-
+  const [clicked, setIsClicked] = useState(false);
+  const handleClickAvatar = () => {
+    setIsClicked((prevState) => !prevState);
+    console.log(clicked);
+  };
   useEffect(() => {
     const handleResize = () => {
       setScreenSize(window.innerWidth);
@@ -34,10 +41,14 @@ const Navbar = () => {
       {isSmallScreen ? (
         <BottomNavigation />
       ) : (
-        <div className="hidden md:flex items-center gap-4 md:gap-10">
+        <div
+          className={`${
+            isSmallScreen ? "hidden" : "flex items-center gap-4 md:gap-10"
+          } `}
+        >
           {links.map((item, index) => (
             <NavLink to={item.path} key={index} className="flex flex-row gap-3">
-              <span className="text-xs font-medium tracking-tight text-sky-500 md:text-lg font-sans">
+              <span className="text-sm font-medium tracking-tight text-sky-500 md:text-lg font-sans">
                 {item.label}
               </span>
             </NavLink>
@@ -57,8 +68,16 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="rounded-full h-8 w-8 bg-gray-400"></div>
+        <div className="rounded-full h-8 w-8 bg-gray-400">
+          <img
+            src={`${user.photoURL}`}
+            alt="avatar"
+            className="h-8 w-8 rounded-full cursor-pointer"
+            onClick={handleClickAvatar}
+          />
+        </div>
       </div>
+      <div className="absolute top-5 left-5">{clicked ? <Popup /> : null}</div>
     </div>
   );
 };
