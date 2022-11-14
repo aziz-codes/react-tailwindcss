@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import { links } from "../data/dummy";
 import { EnvelopeIcon, BellIcon } from "@heroicons/react/24/outline";
 import BottomNavigation from "./BottomNavigation";
 import { UserAuth } from "../context/AuthContext";
 import Popup from "./Modal";
-import { chat } from "../data/dummy";
 import Chat from "./Chat";
 const Navbar = () => {
-  console.log(chat);
   const { user } = UserAuth();
   const [isSmallScreen, setSmallScreen] = useState(false);
   const [screenSize, setScreenSize] = useState(undefined);
@@ -18,6 +16,9 @@ const Navbar = () => {
   const handleClickAvatar = () => {
     setIsClicked(true);
     setIsOpen((prevState) => !prevState);
+  };
+  const handleChatModal = () => {
+    setChatClicked(!chatClicked);
   };
   const handleIsOpen = () => {
     setIsOpen(false);
@@ -40,6 +41,19 @@ const Navbar = () => {
       setSmallScreen(false);
     }
   }, [screenSize]);
+
+  //to check click event outside the message component.
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutSide, true);
+  }, []);
+  const refOne = useRef(null);
+  const handleClickOutSide = (e) => {
+    if (!refOne.current.contains(e.target)) {
+      setChatClicked(false);
+    }
+  };
+
   const normalLink =
     "text-sm font-medium tracking-tight text-white md:text-lg font-sans ";
   const activeLink =
@@ -73,16 +87,19 @@ const Navbar = () => {
 
       <div className="flex items-center gap-4">
         <div className="relative icons">
-          <EnvelopeIcon
-            onClick={() => {
-              setChatClicked((prevState) => !prevState);
-            }}
-          />
+          <EnvelopeIcon onClick={handleChatModal} />
           <div className="h-2 w-2 bg-green-600 rounded-full absolute top-1 animate-pulse"></div>
         </div>
         {chatClicked ? (
-          <div className="top-10 absolute right-[100px]">
-            <div className="absolute h-4 w-4 bg-gray-400 shadow-2xl  rotate-45 -top-1 right-1"></div>
+          <div
+            onClick={(e) => {
+              handleClickOutSide(e);
+            }}
+            className="top-10 absolute right-[100px] w-[20rem] h-[28rem] scrollbar-thin
+           scrollbar-thumb-gray-300  scrollbar-track-gray-400 
+            overflow-x-hidden overflow-y-auto"
+            ref={refOne}
+          >
             <Chat />
           </div>
         ) : null}
