@@ -10,6 +10,7 @@ const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState([]);
+  const [chatOpen, setChatOpen] = useState(false);
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
 
@@ -35,6 +36,8 @@ export const AuthContextProvider = ({ children }) => {
         googleSignIn,
         logout,
         user,
+        chatOpen,
+        setChatOpen,
       }}
     >
       {children}

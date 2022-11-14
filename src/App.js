@@ -3,8 +3,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Home, Equipment, Employees, Client, Statistics } from "./pages/index";
 import SignIn from "./components/SignIn";
 import { UserAuth } from "./context/AuthContext";
+import Messanger from "./components/Messanger";
 const App = () => {
-  const { user } = UserAuth();
+  const { user, chatOpen } = UserAuth();
   return (
     <>
       {user ? (
@@ -23,6 +24,7 @@ const App = () => {
       ) : (
         <SignIn />
       )}
+      {chatOpen ? <Messanger /> : null}
     </>
   );
 };
