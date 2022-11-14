@@ -5,12 +5,16 @@ import { EnvelopeIcon, BellIcon } from "@heroicons/react/24/outline";
 import BottomNavigation from "./BottomNavigation";
 import { UserAuth } from "../context/AuthContext";
 import Popup from "./Modal";
+import { chat } from "../data/dummy";
+import Chat from "./Chat";
 const Navbar = () => {
+  console.log(chat);
   const { user } = UserAuth();
   const [isSmallScreen, setSmallScreen] = useState(false);
   const [screenSize, setScreenSize] = useState(undefined);
   const [isOpen, setIsOpen] = useState(false);
   const [clicked, setIsClicked] = useState(false);
+  const [chatClicked, setChatClicked] = useState(false);
   const handleClickAvatar = () => {
     setIsClicked(true);
     setIsOpen((prevState) => !prevState);
@@ -69,9 +73,19 @@ const Navbar = () => {
 
       <div className="flex items-center gap-4">
         <div className="relative icons">
-          <EnvelopeIcon />
+          <EnvelopeIcon
+            onClick={() => {
+              setChatClicked((prevState) => !prevState);
+            }}
+          />
           <div className="h-2 w-2 bg-green-600 rounded-full absolute top-1 animate-pulse"></div>
         </div>
+        {chatClicked ? (
+          <div className="top-10 absolute right-[100px]">
+            <div className="absolute h-4 w-4 bg-gray-400 shadow-2xl  rotate-45 -top-1 right-1"></div>
+            <Chat />
+          </div>
+        ) : null}
         <div className="icons relative">
           <BellIcon />
           <div
