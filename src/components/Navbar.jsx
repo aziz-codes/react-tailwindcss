@@ -6,8 +6,12 @@ import BottomNavigation from "./BottomNavigation";
 import { UserAuth } from "../context/AuthContext";
 import Popup from "./Modal";
 import Chat from "./Chat";
+import CircularProgress from "@mui/material/CircularProgress";
+
 const Navbar = () => {
-  const { user } = UserAuth();
+  let MessangerRef = useRef(null);
+  useOutsideAlerter(MessangerRef);
+  const { user, loading } = UserAuth();
   const [isSmallScreen, setSmallScreen] = useState(false);
   const [screenSize, setScreenSize] = useState(undefined);
   const [isOpen, setIsOpen] = useState(false);
@@ -44,16 +48,35 @@ const Navbar = () => {
 
   //to check click event outside the message component.
 
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutSide, true);
-  }, []);
-  const refOne = useRef(null);
-  const handleClickOutSide = (e) => {
-    if (!refOne.current.contains(e.target)) {
-      setChatClicked(false);
-    }
-  };
+  // useEffect(() => {
+  //   let handler = (e) => {
+  //     if (!MessangerRef.current.contains(e.target)) {
+  //       setChatClicked(false);
+  //     }
+  //   };
+  //   window.addEventListener("mousedown", handler);
 
+  //   return () => document.removeEventListener("mousedown");
+  // }, []);
+
+  function useOutsideAlerter(ref) {
+    useEffect(() => {
+      /**
+       * Alert if clicked on outside of element
+       */
+      function handleClickOutside(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setChatClicked(false);
+        }
+      }
+      // Bind the event listener
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        // Unbind the event listener on clean up
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  }
   const normalLink =
     "text-sm font-medium tracking-tight text-white md:text-lg font-sans ";
   const activeLink =
@@ -92,13 +115,10 @@ const Navbar = () => {
         </div>
         {chatClicked ? (
           <div
-            onClick={(e) => {
-              handleClickOutSide(e);
-            }}
             className="top-10 absolute right-[100px] w-[20rem] h-[28rem] scrollbar-thin
            scrollbar-thumb-gray-300  scrollbar-track-gray-400 
             overflow-x-hidden overflow-y-auto"
-            ref={refOne}
+            ref={MessangerRef}
           >
             <Chat />
           </div>
@@ -114,12 +134,16 @@ const Navbar = () => {
         </div>
 
         <div className="rounded-full h-8 w-8 bg-gray-400">
-          <img
-            src={`${user.photoURL}`}
-            alt="avt"
-            className="h-8 w-8 rounded-full cursor-pointer"
-            onClick={handleClickAvatar}
-          />
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <img
+              src={`${user.photoURL}`}
+              alt="avt"
+              className="h-8 w-8 rounded-full cursor-pointer"
+              onClick={handleClickAvatar}
+            />
+          )}
         </div>
       </div>
       <div className="absolute top-5 left-5">
