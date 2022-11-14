@@ -10,7 +10,7 @@ const Messanger = () => {
   const { chatOpen, setChatOpen } = UserAuth();
   return (
     <Backdrop open={chatOpen}>
-      <div className="border shadow-2xl flex flex-col absolute m-auto h-3/4 w-80 bg-white">
+      <div className="border shadow-2xl flex flex-col absolute m-auto h-3/4 w-80 bg-white z-50">
         <div className="w-full h-14 flex flex-row shadow-2xl border p-0 items-center justify-between header pt-1 pb-1">
           <div className="flex flex-row">
             <div className="relative">

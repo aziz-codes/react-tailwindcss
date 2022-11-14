@@ -82,7 +82,7 @@ const Navbar = () => {
   const activeLink =
     "text-sm font-medium tracking-tight text-white md:text-lg font-sans  border-b-2 border-sky-600";
   return (
-    <div className="relative flex flex-row md:justify-between justify-around p-0 h-12 items-center shadow-md md:sticky md:top-0 pr-2 pl-0">
+    <div className="relative flex flex-row md:justify-between justify-around bg-white z-50 p-0 h-12 items-center shadow-md md:sticky md:top-0 pr-2 pl-0">
       <div className="pl-2">
         <h4 className="font-bold text-xl">Bootcamp</h4>
       </div>
@@ -115,9 +115,9 @@ const Navbar = () => {
         </div>
         {chatClicked ? (
           <div
-            className="top-10 absolute right-[100px] w-[20rem] h-[28rem] scrollbar-thin
+            className="md:top-10 absolute md:right-[100px] md:w-[20rem] h-[28rem] m-auto scrollbar-thin
            scrollbar-thumb-gray-300  scrollbar-track-gray-400 
-            overflow-x-hidden overflow-y-auto"
+            overflow-x-hidden overflow-y-auto flex items-center justify-center right-4 top-24"
             ref={MessangerRef}
           >
             <Chat />
@@ -133,9 +133,11 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="rounded-full h-8 w-8 bg-gray-400">
+        <div className="rounded-full h-8 w-8 bg-gray-400 flex items-center justify-center">
           {loading ? (
-            <CircularProgress />
+            <div className="spiner animate-spin h-6 w-6 rounded-full bg-gray-300 visually-hidden block">
+              ........
+            </div>
           ) : (
             <img
               src={`${user.photoURL}`}
